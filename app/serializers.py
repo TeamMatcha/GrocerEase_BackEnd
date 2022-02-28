@@ -1,14 +1,17 @@
 from rest_framework import serializers
 from .models import User, List, Tag, ListItem
 
+
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ('tag',)
+        fields = ("tag",)
+
 
 class Categories(object):
-    def __init__(self, choices): 
-        self.choices = choices 
+    def __init__(self, choices):
+        self.choices = choices
+
 
 CATEGORIES = (
     ("Produce"),
@@ -29,35 +32,33 @@ CATEGORIES = (
     ("Frozen Goods"),
 )
 
+
 class ItemSerializer(serializers.ModelSerializer):
-    choices = serializers.ChoiceField(choices = CATEGORIES) 
+    choices = serializers.ChoiceField(choices=CATEGORIES)
+
     class Meta:
         model = ListItem
-        fields = ( 'pk',
-        'list',
-        'name',
-        'item_quantity',
-        'choices',
+        fields = (
+            "pk",
+            "list",
+            "name",
+            "item_quantity",
+            "choices",
         )
-        read_only_fields = ['list', 'choices']
+        read_only_fields = ["list", "choices"]
+
 
 class ListSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = List
-        fields = ('pk',
-        'name',
-        'user', 
-        'tags',
-        'date_created'
-        )
-        read_only_fields = ['user']
-        
+        fields = ("pk", "name", "user", "tags", "date_created")
+        read_only_fields = ["user"]
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+
 class UserSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = User
         fields = ("username", "email", "password")
